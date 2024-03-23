@@ -23,6 +23,7 @@ import {
 	signOutAccount,
 	updatePost,
 	updateUser,
+	getUsers,
 } from '../appwrite/api'
 
 //*** user  */
@@ -189,6 +190,13 @@ export const useUpdatePost = () => {
 				queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.$id],
 			})
 		},
+	})
+}
+
+export const useGetUsers = (limit?: number) => {
+	return useQuery({
+		queryKey: [QUERY_KEYS.GET_USERS],
+		queryFn: () => getUsers(limit),
 	})
 }
 
