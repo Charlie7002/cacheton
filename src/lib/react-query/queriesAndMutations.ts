@@ -24,6 +24,7 @@ import {
 	updatePost,
 	updateUser,
 	getUsers,
+	saveComment,
 } from '../appwrite/api'
 
 //*** user  */
@@ -236,6 +237,29 @@ export const useUpdateUser = () => {
 	})
 }
 
+export const useSaveComment = () => {
+	const queryClient = useQueryClient()
+	return useMutation({
+		mutationFn: ({
+			author,
+			post,
+			comment,
+		}: {
+			author: string
+			post: string
+			comment: string
+		}) => saveComment(author, post, comment),
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: [QUERY_KEYS.GET_COMMENTS],
+			})
+			queryClient.invalidateQueries({
+				queryKey: [QUERY_KEYS.GET_RECENT_COMMENTS],
+			})
+		},
+	})
+}
+
 export enum QUERY_KEYS {
 	// AUTH KEYS
 	CREATE_USER_ACCOUNT = 'createUserAccount',
@@ -255,4 +279,7 @@ export enum QUERY_KEYS {
 
 	//  SEARCH KEYS
 	SEARCH_POSTS = 'getSearchPosts',
+
+	GET_COMMENTS = 'getComments',
+	GET_RECENT_COMMENTS = 'getRecentComments',
 }

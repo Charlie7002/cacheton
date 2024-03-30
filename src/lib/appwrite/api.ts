@@ -499,3 +499,44 @@ export async function getInfinitePosts({ pageParam }: { pageParam: number }) {
 		console.log(error)
 	}
 }
+
+export async function getCommentByPostID(PostId: string) {
+	try {
+		const comments = await databases.getDocument(
+			appwriteConfig.databaseId,
+			appwriteConfig.commentCollectionId,
+			PostId,
+		)
+
+		if (!comments) throw Error
+
+		return comments
+	} catch (error) {
+		console.log(error)
+	}
+}
+
+export async function saveComment(
+	userId: string,
+	postId: string,
+	comment: string,
+) {
+	try {
+		const createComment = await databases.createDocument(
+			appwriteConfig.databaseId,
+			appwriteConfig.commentCollectionId,
+			ID.unique(),
+			{
+				author: userId,
+				post: postId,
+				comment,
+			},
+		)
+
+		if (!createComment) throw Error
+
+		return createComment
+	} catch (error) {
+		console.log(error)
+	}
+}

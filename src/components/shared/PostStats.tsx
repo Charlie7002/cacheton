@@ -1,6 +1,7 @@
 import { Models } from 'appwrite'
 import { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
+import CommentForm from '../forms/CommentForm'
 
 import { checkIsLiked } from '@/lib/utils'
 
@@ -28,6 +29,8 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
 	const { mutate: deleteSavePost } = useDeleteSavedPost()
 
 	const { data: currentUser } = useGetCurrentUser()
+
+	console.log(currentUser)
 
 	const savedPostRecord = currentUser?.save.find(
 		(record: Models.Document) => record.post.$id === post.$id,
@@ -76,20 +79,35 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
 		<div
 			className={`flex justify-between items-center z-20 ${containerStyles}`}
 		>
-			<div className="flex gap-2 mr-5">
-				<img
-					src={`${
-						checkIsLiked(likes, userId)
-							? '/assets/icons/liked.svg'
-							: '/assets/icons/like.svg'
-					}`}
-					alt="like"
-					width={20}
-					height={20}
-					onClick={e => handleLikePost(e)}
-					className="cursor-pointer"
-				/>
-				<p className="small-medium lg:base-medium">{likes.length}</p>
+			<div className="flex flex-start">
+				<div className="flex gap-2 mr-5">
+					<img
+						src={`${
+							checkIsLiked(likes, userId)
+								? '/assets/icons/liked.svg'
+								: '/assets/icons/like.svg'
+						}`}
+						alt="like"
+						width={20}
+						height={20}
+						onClick={e => handleLikePost(e)}
+						className="cursor-pointer"
+					/>
+					<p className="small-medium lg:base-medium">{likes.length}</p>
+				</div>
+
+				<div className="flex gap-2 mr-5">
+					<img
+						src={'/assets/icons/comment.svg'}
+						alt="comment"
+						width={20}
+						height={20}
+						// onClick={e => handleLikePost(e)}
+						className="cursor-pointer"
+					/>
+					{/* to do */}
+					<p className="small-medium lg:base-medium">{likes.length}</p>
+				</div>
 			</div>
 
 			<div className="flex gap-2">
@@ -104,6 +122,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
 					onClick={e => handleSavePost(e)}
 				/>
 			</div>
+			<CommentForm postId={post.$id} />
 		</div>
 	)
 }
